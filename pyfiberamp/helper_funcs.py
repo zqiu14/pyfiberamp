@@ -25,9 +25,10 @@ def load_two_column_file(file_name: str):
     return np.loadtxt(file_name, converters={0: to_float, 1: to_float})
 
 
-def to_float(x: str):
-    x = x.decode()
-    x = x.replace(',', '.')
+def to_float(x):
+    if isinstance(x, bytes):
+        x = x.decode()
+    x = str(x).replace(',', '.')
     return float(x)
 
 
@@ -162,11 +163,12 @@ def fiber_v_parameter(wl: float, r: float, na: float):
     return 2 * np.pi / wl * r * na
 
 
-def zeta_from_fiber_parameters(core_radius: float, upper_state_lifetime: float, ion_number_density: float):
-    """Calculates the Giles mode's saturation parameter zeta.
+def zeta_from_fiber_parameters(core_area: float, upper_state_lifetime: float, ion_number_density: float):
+    """Calculates the Giles model's saturation parameter ``zeta`` using an
+    effective mode area.
 
-    :param core_radius: Core radius of the fiber
-    :type core_radius: float
+    :param core_area: Effective mode area of the guided mode
+    :type core_area: float
     :param upper_state_lifetime: Lifetime of the excited state
     :type upper_state_lifetime: float
     :param ion_number_density: Number density of the dopant ions (1/m^3)
@@ -174,7 +176,7 @@ def zeta_from_fiber_parameters(core_radius: float, upper_state_lifetime: float, 
     :returns: Saturation parameter zeta
     :rtype: float
     """
-    return np.pi * core_radius**2 * ion_number_density / upper_state_lifetime
+    return core_area * ion_number_density / upper_state_lifetime
 
 
 def gaussian_peak_power(average_power: float, f_rep: float, fwhm_duration: float):

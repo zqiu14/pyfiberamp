@@ -17,7 +17,7 @@ class SteadyStateSimulationWithRaman(SteadyStateSimulation):
         self.model = GilesModelWithRaman
 
     def add_pulsed_forward_signal(self, wl, input_power, f_rep, fwhm_duration,
-                                  wl_bandwidth=0.0, loss=None, mode=None, channel_id=None,
+                                  wl_bandwidth=0.0, loss=None, mode=None, overlap=None, channel_id=None,
                                   reflection_target_id=None, reflectance=0.0):
         """Adds a new forward propagating single-frequency pulsed signal to the simulation. A pulsed signal has a higher
         peak input_power resulting in stronger nonlinear effects, in particular spontaneous and stimulated Raman scattering.
@@ -43,12 +43,14 @@ class SteadyStateSimulationWithRaman(SteadyStateSimulation):
 
         """
         check_signal_reprate(f_rep)
+        overlaps = None if overlap is None else np.array(overlap, ndmin=1)
         self.channels.create_channel(channel_type='signal',
                                      direction=1,
                                      fiber=self.fiber,
                                      input_power=input_power,
                                      wl=wl,
                                      mode=mode,
+                                     overlaps=overlaps,
                                      channel_id=channel_id,
                                      wl_bandwidth=wl_bandwidth,
                                      loss=loss,

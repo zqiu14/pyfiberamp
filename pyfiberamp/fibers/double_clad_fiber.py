@@ -10,7 +10,7 @@ class DoubleCladFiber(ActiveFiber):
     @classmethod
     def from_cross_section_files(cls, length=0, absorption_cs_file=None, emission_cs_file=None,
                  core_radius=0, upper_state_lifetime=0, ion_number_density=0,
-                 background_loss=0, core_na=0, ratio_of_core_and_cladding_diameters=0):
+                 background_loss=0, core_na=0, ratio_of_core_and_cladding_diameters=0, mode_area=None):
         """
         :param length: Fiber length
         :type length: float
@@ -35,10 +35,10 @@ class DoubleCladFiber(ActiveFiber):
 
         spectroscopy = Spectroscopy.from_files(absorption_cs_file, emission_cs_file, upper_state_lifetime)
         cls(length, core_radius, background_loss, core_na, spectroscopy, ion_number_density,
-            ratio_of_core_and_cladding_diameters)
+            mode_area, ratio_of_core_and_cladding_diameters)
 
     def __init__(self, length=0, core_radius=0, background_loss=0, core_na=0,
-                 spectroscopy=None, ion_number_density=0, ratio_of_core_and_cladding_diameters=0):
+                 spectroscopy=None, ion_number_density=0, mode_area=None, ratio_of_core_and_cladding_diameters=0):
 
         """
         :param length: Fiber length
@@ -62,7 +62,8 @@ class DoubleCladFiber(ActiveFiber):
                          spectroscopy=spectroscopy,
                          ion_number_density=ion_number_density,
                          background_loss=background_loss,
-                         core_na=core_na)
+                         core_na=core_na,
+                         mode_area=mode_area)
         self.core_to_cladding_ratio = ratio_of_core_and_cladding_diameters
 
     def pump_to_core_overlap(self):

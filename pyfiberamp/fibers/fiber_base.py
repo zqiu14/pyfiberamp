@@ -11,7 +11,7 @@ class FiberBase(ABC):
     could act as a base class but subclassing ActiveFiber from PassiveFiber feels conceptually wrong."""
 
     @abstractmethod
-    def __init__(self, length=0, core_radius=0, background_loss=0, core_na=0):
+    def __init__(self, length=0, core_radius=0, background_loss=0, core_na=0, mode_area=None):
         """
 
         :param length: Fiber length
@@ -25,11 +25,14 @@ class FiberBase(ABC):
 
         """
         self.length = length
+        if mode_area is not None and core_radius == 0:
+            core_radius = np.sqrt(mode_area / np.pi)
         self.core_radius = core_radius
+        self.mode_area = mode_area
         self.background_loss = background_loss
         self.core_na = core_na
         self.core_refractive_index = DEFAULT_GROUP_INDEX
-        self.effective_area_type = 'mode'
+        self.effective_area_type = 'core' if mode_area is not None else 'mode'
         self.doping_profile = DopingProfile(ion_number_densities=[0], radii=[core_radius],
                                             num_of_angular_sections=1, core_radius=core_radius)
 
@@ -48,12 +51,16 @@ class FiberBase(ABC):
         return len(self.doping_profile.ion_number_densities)
 
     def core_area(self):
-        """Returns the core area of the fiber defined as pi*r**2, where r is the core radius.
+        """Returns the effective mode area of the fiber. If ``mode_area`` was supplied
+        during initialization, that value is returned. Otherwise the core area
+        is computed as :math:`\pi r^2` from the core radius.
 
-        :returns: Core area
+        :returns: Effective mode area
         :rtype: float
 
         """
+        if self.mode_area is not None:
+            return self.mode_area
         return self.core_radius**2 * np.pi
 
     @abstractmethod

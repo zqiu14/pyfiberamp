@@ -33,23 +33,31 @@ class Channels:
         return channel_id
 
     def create_channel(self, channel_type, direction,
-                       fiber, input_power, wl, mode, channel_id=None,
+                       fiber, input_power, wl, mode=None, overlaps=None, channel_id=None,
                        num_of_modes=NUMBER_OF_ASE_POLARIZATION_MODES, wl_bandwidth=0.0,
                        loss=None,
                        reflection_target_id=None, reflectance=0.0,
                        peak_power_func=lambda x: x):
-        if mode is None:
-            if channel_type in ['signal', 'ase', 'raman']:
-                mode = fiber.default_signal_mode(wl_to_freq(wl))
-            else:
-                mode = fiber.default_pump_mode(wl_to_freq(wl))
+        if overlaps is None:
+            if mode is None:
+                if channel_type in ['signal', 'ase', 'raman']:
+                    mode = fiber.default_signal_mode(wl_to_freq(wl))
+                else:
+                    mode = fiber.default_pump_mode(wl_to_freq(wl))
 
-        channel = OpticalChannel.from_mode(channel_id, channel_type, direction,
-                                           fiber, input_power, wl, mode,
-                                           num_of_modes, wl_bandwidth,
-                                           loss,
-                                           reflection_target_id, reflectance,
-                                           peak_power_func)
+            channel = OpticalChannel.from_mode(channel_id, channel_type, direction,
+                                               fiber, input_power, wl, mode,
+                                               num_of_modes, wl_bandwidth,
+                                               loss,
+                                               reflection_target_id, reflectance,
+                                               peak_power_func)
+        else:
+            channel = OpticalChannel.from_overlaps(channel_id, channel_type, direction,
+                                                   fiber, input_power, wl, overlaps,
+                                                   num_of_modes, wl_bandwidth,
+                                                   loss,
+                                                   reflection_target_id, reflectance,
+                                                   peak_power_func, mode=mode)
         self.add_channel(channel)
 
     def add_channel(self, channel):
