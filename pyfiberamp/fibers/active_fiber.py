@@ -11,7 +11,7 @@ class ActiveFiber(FiberBase):
     @classmethod
     def from_cross_section_files(cls, length, absorption_cs_file=None, emission_cs_file=None,
                      core_radius=0, upper_state_lifetime=0, ion_number_density=0,
-                     background_loss=0, core_na=0):
+                     background_loss=0, core_na=0, mode_area=None):
         """
         :param length: Fiber length
         :type length: float
@@ -31,10 +31,10 @@ class ActiveFiber(FiberBase):
         :type core_na: float
         """
         spectroscopy = Spectroscopy.from_files(absorption_cs_file, emission_cs_file, upper_state_lifetime)
-        return cls(length, core_radius, background_loss, core_na, spectroscopy, ion_number_density)
+        return cls(length, core_radius, background_loss, core_na, spectroscopy, ion_number_density, mode_area)
 
     def __init__(self, length=0, core_radius=0, background_loss=0, core_na=0,
-                 spectroscopy=None, ion_number_density=0):
+                 spectroscopy=None, ion_number_density=0, mode_area=None):
         """
         :param length: Fiber length
         :type length: float
@@ -53,7 +53,8 @@ class ActiveFiber(FiberBase):
         super().__init__(length=length,
                          core_radius=core_radius,
                          background_loss=background_loss,
-                         core_na=core_na)
+                         core_na=core_na,
+                         mode_area=mode_area)
 
         self.spectroscopy = spectroscopy
         self.doping_profile = DopingProfile(ion_number_densities=[ion_number_density], radii=[core_radius],
@@ -79,7 +80,7 @@ class ActiveFiber(FiberBase):
 
     def saturation_parameter(self):
         """Returns the constant saturation parameter zeta defined in the Giles model."""
-        return zeta_from_fiber_parameters(self.core_radius, self.spectroscopy.upper_state_lifetime, self.ion_number_density)
+        return zeta_from_fiber_parameters(self.core_area(), self.spectroscopy.upper_state_lifetime, self.ion_number_density)
 
     def get_channel_emission_cross_section(self, freq, frequency_bandwidth):
         if frequency_bandwidth == 0:

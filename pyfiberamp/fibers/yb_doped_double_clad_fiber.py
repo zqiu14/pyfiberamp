@@ -5,7 +5,7 @@ class YbDopedDoubleCladFiber(DoubleCladFiber):
     """YbDopedDoubleCladFiber is a convenience class for Yb-doped double-clad fiber that uses the default spectroscopic
      data for Yb-ions."""
     def __init__(self, length, core_radius, ion_number_density,
-                 background_loss, core_na, ratio_of_core_and_cladding_diameters):
+                 background_loss, core_na, ratio_of_core_and_cladding_diameters, mode_area=None):
         """
 
         :param length: Fiber length
@@ -28,4 +28,5 @@ class YbDopedDoubleCladFiber(DoubleCladFiber):
                          spectroscopy=YbGermanoSilicate,
                          background_loss=background_loss,
                          core_na=core_na,
+                         mode_area=mode_area,
                          ratio_of_core_and_cladding_diameters=ratio_of_core_and_cladding_diameters)

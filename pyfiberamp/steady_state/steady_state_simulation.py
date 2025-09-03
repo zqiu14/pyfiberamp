@@ -29,7 +29,7 @@ class SteadyStateSimulation:
         self.channels = Channels(fiber)
         self.solver_verbosity = 2
 
-    def add_forward_signal(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, channel_id=None,
+    def add_forward_signal(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, overlap=None, channel_id=None,
                            reflection_target_id=None, reflectance=0.0):
         """Adds a new forward propagating single-frequency CW signal to the simulation.
 
@@ -52,12 +52,14 @@ class SteadyStateSimulation:
         :type reflectance: float
 
         """
+        overlaps = None if overlap is None else np.array(overlap, ndmin=1)
         self.channels.create_channel(channel_type='signal',
                                      direction=1,
                                      fiber=self.fiber,
                                      input_power=input_power,
                                      wl=wl,
                                      mode=mode,
+                                     overlaps=overlaps,
                                      channel_id=channel_id,
                                      wl_bandwidth=wl_bandwidth,
                                      loss=loss,
@@ -65,7 +67,7 @@ class SteadyStateSimulation:
                                      reflectance=reflectance)
 
     def add_backward_signal(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None,
-                            mode=None, channel_id=None,
+                            mode=None, overlap=None, channel_id=None,
                             reflection_target_id=None, reflectance=0.0):
         """
         Adds a new forward propagating single-frequency CW signal to the simulation.
@@ -89,19 +91,21 @@ class SteadyStateSimulation:
         :type reflectance: float
 
         """
+        overlaps = None if overlap is None else np.array(overlap, ndmin=1)
         self.channels.create_channel(channel_type='signal',
                                      direction=-1,
                                      fiber=self.fiber,
                                      input_power=input_power,
                                      wl=wl,
                                      mode=mode,
+                                     overlaps=overlaps,
                                      channel_id=channel_id,
                                      wl_bandwidth=wl_bandwidth,
                                      loss=loss,
                                      reflection_target_id=reflection_target_id,
                                      reflectance=reflectance)
 
-    def add_forward_pump(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, channel_id=None,
+    def add_forward_pump(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, overlap=None, channel_id=None,
                          reflection_target_id=None, reflectance=0.0):
         """
         Adds a new forward propagating single-frequency pump to the simulation.
@@ -125,19 +129,21 @@ class SteadyStateSimulation:
         :type reflectance: float
 
         """
+        overlaps = None if overlap is None else np.array(overlap, ndmin=1)
         self.channels.create_channel(channel_type='pump',
                                      direction=1,
                                      fiber=self.fiber,
                                      input_power=input_power,
                                      wl=wl,
                                      mode=mode,
+                                     overlaps=overlaps,
                                      channel_id=channel_id,
                                      wl_bandwidth=wl_bandwidth,
                                      loss=loss,
                                      reflection_target_id=reflection_target_id,
                                      reflectance=reflectance)
 
-    def add_backward_pump(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, channel_id=None,
+    def add_backward_pump(self, wl: float, input_power: float, wl_bandwidth=0.0, loss=None, mode=None, overlap=None, channel_id=None,
                           reflection_target_id=None, reflectance=0.0):
         """
         Adds a new backward propagating single-frequency pump to the simulation.
@@ -162,12 +168,14 @@ class SteadyStateSimulation:
 
         """
 
+        overlaps = None if overlap is None else np.array(overlap, ndmin=1)
         self.channels.create_channel(channel_type='pump',
                                      direction=-1,
                                      fiber=self.fiber,
                                      input_power=input_power,
                                      wl=wl,
                                      mode=mode,
+                                     overlaps=overlaps,
                                      channel_id=channel_id,
                                      wl_bandwidth=wl_bandwidth,
                                      loss=loss,
