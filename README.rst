@@ -130,8 +130,9 @@ fibers [3]_ and supports importing spectra for other dopants and glass compositi
 Theory basics
 ==============
 For a quick review on the theory, see the `pyfiberamp theory.pdf
-<https://github.com/Jomiri/pyfiberamp/blob/master/pyfiberamp%20theory.pdf>`_ file. Theory on the time-dynamic
-simulations is not yet included. A more complete description can be found in the references.
+<https://github.com/Jomiri/pyfiberamp/blob/master/pyfiberamp%20theory.pdf>`_ file. Additional details on the
+time-dynamic solver are available in `docs/dynamic_solver.md <docs/dynamic_solver.md>`_. A more complete
+description can be found in the references.
 
 License
 ========
